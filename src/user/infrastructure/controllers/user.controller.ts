@@ -12,6 +12,7 @@ import { RegisterUserUseCase } from '../../application/use-cases/register-user.u
 import { ConfirmEmailUseCase } from '../../application/use-cases/confirm-email.use-case';
 import { RegisterUserRequestDto } from './dtos/register-user.dto';
 import { ConfirmEmailRequestDto } from './dtos/confirm-email.dto';
+import { UserRole } from '../../domain/user.entity';
 
 @ApiTags('users')
 @Controller('users')
@@ -55,7 +56,7 @@ export class UserController {
       lastName: dto.lastName,
       phone: dto.phone,
       password: dto.password,
-      role: dto.role,
+      role: UserRole.BASIC,
     });
 
     return {
