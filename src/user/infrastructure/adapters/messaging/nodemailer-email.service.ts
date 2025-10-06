@@ -17,9 +17,7 @@ export class NodemailerEmailService implements EmailService {
 
     if (this.isConfigured) {
       this.transporter = nodemailer.createTransport({
-        host: this.configService.get<string>('SMTP_HOST'),
-        port: this.configService.get<number>('SMTP_PORT'),
-        secure: this.configService.get<boolean>('SMTP_SECURE', false),
+        service: 'gmail',
         auth: {
           user: smtpUser,
           pass: smtpPass,
