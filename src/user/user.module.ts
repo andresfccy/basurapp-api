@@ -3,7 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 
 // Domain
-import { UserDocument, UserSchema } from './infrastructure/adapters/persistence/user.schema';
+import {
+  UserDocument,
+  UserSchema,
+} from './infrastructure/adapters/persistence/user.schema';
 
 // Application - Use Cases
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';

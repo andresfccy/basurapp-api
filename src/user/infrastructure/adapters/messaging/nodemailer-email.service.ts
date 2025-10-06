@@ -1,22 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
 import { EmailService } from '../../../application/ports/email.service';
 
 @Injectable()
 export class NodemailerEmailService implements EmailService {
-  private transporter: nodemailer.Transporter;
+  private transporter: nodemailer.Transporter | null = null;
+  private readonly logger = new Logger(NodemailerEmailService.name);
+  private readonly isConfigured: boolean;
 
   constructor(private readonly configService: ConfigService) {
-    this.transporter = nodemailer.createTransport({
-      host: this.configService.get<string>('SMTP_HOST'),
-      port: this.configService.get<number>('SMTP_PORT'),
-      secure: this.configService.get<boolean>('SMTP_SECURE', false),
-      auth: {
-        user: this.configService.get<string>('SMTP_USER'),
-        pass: this.configService.get<string>('SMTP_PASS'),
-      },
-    });
+    const smtpUser = this.configService.get<string>('SMTP_USER');
+    const smtpPass = this.configService.get<string>('SMTP_PASS');
+
+    this.isConfigured = !!(smtpUser && smtpPass && smtpUser !== 'tu-email@gmail.com');
+
+    if (this.isConfigured) {
+      this.transporter = nodemailer.createTransport({
+        host: this.configService.get<string>('SMTP_HOST'),
+        port: this.configService.get<number>('SMTP_PORT'),
+        secure: this.configService.get<boolean>('SMTP_SECURE', false),
+        auth: {
+          user: smtpUser,
+          pass: smtpPass,
+        },
+      });
+      this.logger.log('✅ Servicio de email configurado correctamente');
+    } else {
+      this.logger.warn(
+        '⚠️  SMTP no configurado - Los códigos de verificación se mostrarán en consola',
+      );
+    }
   }
 
   async sendVerificationEmail(
@@ -24,17 +38,38 @@ export class NodemailerEmailService implements EmailService {
     name: string,
     verificationCode: string,
   ): Promise<void> {
+    if (!this.isConfigured || !this.transporter) {
+      // Modo desarrollo: loguear el código en consola
+      this.logger.log(`
+╔═══════════════════════════════════════════════════╗
+║  📧 EMAIL DE VERIFICACIÓN (Modo Desarrollo)       ║
+╠═══════════════════════════════════════════════════╣
+║  Para: ${to.padEnd(43)} ║
+║  Nombre: ${name.padEnd(41)} ║
+║  Código: ${verificationCode.padEnd(41)} ║
+╚═══════════════════════════════════════════════════╝
+      `);
+      return;
+    }
+
     const mailOptions = {
-      from: this.configService.get<string>(
-        'SMTP_FROM',
-        'noreply@basurapp.com',
-      ),
+      from: this.configService.get<string>('SMTP_FROM', 'noreply@basurapp.com'),
       to,
       subject: 'Verificación de correo electrónico - BasurApp',
       html: this.getVerificationEmailTemplate(name, verificationCode),
     };
 
-    await this.transporter.sendMail(mailOptions);
+    try {
+      await this.transporter.sendMail(mailOptions);
+      this.logger.log(`✅ Email enviado exitosamente a ${to}`);
+    } catch (error) {
+      this.logger.error(
+        `❌ Error enviando email a ${to}: ${error.message}`,
+      );
+      // En desarrollo, mostrar el código aunque falle el envío
+      this.logger.log(`Código de verificación para ${to}: ${verificationCode}`);
+      throw error;
+    }
   }
 
   private getVerificationEmailTemplate(

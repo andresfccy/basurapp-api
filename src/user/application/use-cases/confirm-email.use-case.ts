@@ -4,7 +4,8 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { UserRepository, USER_REPOSITORY } from '../ports/user.repository';
+import { USER_REPOSITORY } from '../ports/user.repository';
+import type { UserRepository } from '../ports/user.repository';
 
 export class ConfirmEmailDto {
   email: string;
@@ -32,7 +33,9 @@ export class ConfirmEmailUseCase {
 
     // Validar código
     if (!user.isVerificationCodeValid(dto.verificationCode)) {
-      throw new BadRequestException('Código de verificación inválido o expirado');
+      throw new BadRequestException(
+        'Código de verificación inválido o expirado',
+      );
     }
 
     // Marcar como verificado

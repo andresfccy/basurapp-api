@@ -71,6 +71,13 @@ SMTP_FROM=noreply@basurapp.com
 3. Genera una contraseña de aplicación
 4. Usa esa contraseña en `SMTP_PASS`
 
+### ⚠️ Nota importante sobre VPN
+
+**Si tienes problemas de conexión a MongoDB Atlas**, asegúrate de:
+- ✅ Desconectar VPNs corporativas/universitarias que puedan bloquear el puerto 27017
+- ✅ Verificar que no estés detrás de un firewall restrictivo
+- ✅ Confirmar que `0.0.0.0/0` está en Network Access de MongoDB Atlas
+
 ## 🏃 Ejecución
 
 ```bash
@@ -81,6 +88,20 @@ pnpm run start:dev
 pnpm run build
 pnpm run start:prod
 ```
+
+La aplicación estará disponible en `http://localhost:3000`
+
+## 📚 Documentación API (Swagger)
+
+Una vez iniciada la aplicación, la documentación interactiva de Swagger está disponible en:
+
+**http://localhost:3000/api**
+
+Swagger proporciona:
+- Documentación completa de todos los endpoints
+- Ejemplos de request/response
+- Posibilidad de probar los endpoints directamente desde el navegador
+- Esquemas de validación de datos
 
 ## 📝 Endpoints
 

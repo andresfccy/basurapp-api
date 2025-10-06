@@ -1,7 +1,9 @@
 import { Inject, Injectable, ConflictException } from '@nestjs/common';
 import { User, UserRole } from '../../domain/user.entity';
-import { UserRepository, USER_REPOSITORY } from '../ports/user.repository';
-import { EmailService, EMAIL_SERVICE } from '../ports/email.service';
+import { USER_REPOSITORY } from '../ports/user.repository';
+import { EMAIL_SERVICE } from '../ports/email.service';
+import type { UserRepository } from '../ports/user.repository';
+import type { EmailService } from '../ports/email.service';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 
