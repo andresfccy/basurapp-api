@@ -7,14 +7,23 @@
       "src": "api/index.ts",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": [
-          "dist/**",
-          "node_modules/swagger-ui-dist/**"
-        ]
+        "includeFiles": ["dist/**"]
       }
     }
   ],
   "routes": [
+    {
+      "src": "/swagger/swagger-ui.css",
+      "dest": "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.min.css"
+    },
+    {
+      "src": "/swagger/swagger-ui-bundle.js",
+      "dest": "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-bundle.min.js"
+    },
+    {
+      "src": "/swagger/swagger-ui-standalone-preset.js",
+      "dest": "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-standalone-preset.min.js"
+    },
     {
       "src": "/(.*)",
       "dest": "api/index.ts"
