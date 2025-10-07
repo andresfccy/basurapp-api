@@ -12,8 +12,8 @@ type GlobalRefs = {
 const globalRef = globalThis as unknown as GlobalRefs;
 
 export default async function handler(
-  req: Request,
-  res: Response,
+  request: Request,
+  response: Response,
 ): Promise<void> {
   if (!globalRef.__NEST_HANDLER__) {
     process.env.SERVERLESS = 'true';
@@ -21,10 +21,9 @@ export default async function handler(
     await app.init();
 
     globalRef.__NEST_APP__ = app;
-    const instance = app.getHttpAdapter().getInstance() as Express;
-    globalRef.__NEST_HANDLER__ = instance;
+    globalRef.__NEST_HANDLER__ = app.getHttpAdapter().getInstance() as Express;
   }
 
   const handle = globalRef.__NEST_HANDLER__;
-  handle(req, res);
+  handle(request, response);
 }
