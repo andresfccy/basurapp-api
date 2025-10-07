@@ -91,6 +91,16 @@ pnpm run start:prod
 
 La aplicación estará disponible en `http://localhost:3000`
 
+### Despliegue en Vercel
+
+El proyecto incluye la configuración necesaria para desplegarse como una función serverless en Vercel:
+
+1. Asegúrate de tener configuradas las variables de entorno (`MONGODB_URI`, `JWT_SECRET`, etc.) en el panel de Vercel.
+2. Desde la raíz de `IngSoftwareAPI`, ejecuta `vercel` o enlaza el repositorio en el dashboard de Vercel.
+3. Vercel instalará dependencias con `pnpm install --frozen-lockfile`, ejecutará `pnpm run build` y expondrá la API desde `api/index.ts`.
+
+El endpoint principal y la documentación Swagger quedarán disponibles en la misma URL del despliegue bajo `/api`.
+
 ## 📚 Documentación API (Swagger)
 
 Una vez iniciada la aplicación, la documentación interactiva de Swagger está disponible en:
