@@ -1,12 +1,5 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsString,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserRole } from '../../../domain/user.entity';
 
 export class RegisterUserRequestDto {
   @ApiProperty({
@@ -49,5 +42,4 @@ export class RegisterUserRequestDto {
   @IsString({ message: 'La contraseña debe ser un texto' })
   @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres' })
   password: string;
-
 }

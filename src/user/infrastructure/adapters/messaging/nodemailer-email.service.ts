@@ -13,7 +13,11 @@ export class NodemailerEmailService implements EmailService {
     const smtpUser = this.configService.get<string>('SMTP_USER');
     const smtpPass = this.configService.get<string>('SMTP_PASS');
 
-    this.isConfigured = !!(smtpUser && smtpPass && smtpUser !== 'tu-email@gmail.com');
+    this.isConfigured = !!(
+      smtpUser &&
+      smtpPass &&
+      smtpUser !== 'tu-email@gmail.com'
+    );
 
     if (this.isConfigured) {
       this.transporter = nodemailer.createTransport({
@@ -61,9 +65,8 @@ export class NodemailerEmailService implements EmailService {
       await this.transporter.sendMail(mailOptions);
       this.logger.log(`✅ Email enviado exitosamente a ${to}`);
     } catch (error) {
-      this.logger.error(
-        `❌ Error enviando email a ${to}: ${error.message}`,
-      );
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.error(`❌ Error enviando email a ${to}: ${message}`);
       // En desarrollo, mostrar el código aunque falle el envío
       this.logger.log(`Código de verificación para ${to}: ${verificationCode}`);
       throw error;

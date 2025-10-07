@@ -1,4 +1,9 @@
-import { Injectable, Inject, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { USER_REPOSITORY } from '../ports/user.repository';
 import type { UserRepository } from '../ports/user.repository';
 import { EMAIL_SERVICE } from '../ports/email.service';
@@ -30,10 +35,15 @@ export class ResendVerificationCodeUseCase {
     }
 
     // Generar nuevo código de verificación
-    const newVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const newVerificationCode = Math.floor(
+      100000 + Math.random() * 900000,
+    ).toString();
 
     // Actualizar el código en la base de datos
-    await this.userRepository.updateVerificationCode(user.id, newVerificationCode);
+    await this.userRepository.updateVerificationCode(
+      user.id,
+      newVerificationCode,
+    );
 
     // Enviar email con el nuevo código
     await this.emailService.sendVerificationEmail(

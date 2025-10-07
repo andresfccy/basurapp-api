@@ -7,12 +7,28 @@ import {
   UsePipes,
   ValidationPipe,
   UseGuards,
-  Request,
+  Req,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
+import type { Request } from 'express';
 import { LoginUseCase } from '../../application/use-cases/login.use-case';
 import { LoginRequestDto } from './dtos/login.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+
+type AuthenticatedRequest = Request & {
+  user: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+  };
+};
 
 @ApiTags('auth')
 @Controller('auth')
@@ -59,7 +75,8 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Cerrar sesión',
-    description: 'Cierra la sesión del usuario (el cliente debe eliminar el token)',
+    description:
+      'Cierra la sesión del usuario (el cliente debe eliminar el token)',
   })
   @ApiResponse({
     status: 200,
@@ -70,7 +87,7 @@ export class AuthController {
       },
     },
   })
-  async logout(@Request() req) {
+  logout() {
     // En una implementación con JWT, el logout se maneja en el cliente
     // El cliente simplemente elimina el token
     // Aquí solo confirmamos que el token era válido
@@ -85,7 +102,8 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Validar token',
-    description: 'Valida el token JWT actual y devuelve la información del usuario',
+    description:
+      'Valida el token JWT actual y devuelve la información del usuario',
   })
   @ApiResponse({
     status: 200,
@@ -102,7 +120,7 @@ export class AuthController {
       },
     },
   })
-  async validate(@Request() req) {
+  validate(@Req() req: AuthenticatedRequest) {
     return {
       user: req.user,
     };
