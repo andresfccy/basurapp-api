@@ -41,13 +41,13 @@ export class PickupDocument {
   @Prop({ required: true, enum: Object.values(PickupTimeSlot) })
   timeSlot!: PickupTimeSlot;
 
-  @Prop({ default: null })
+  @Prop({ type: String, default: null })
   staffName!: string | null;
 
-  @Prop({ default: null })
+  @Prop({ type: String, default: null })
   staffUsername!: string | null;
 
-  @Prop({ default: null })
+  @Prop({ type: String, default: null })
   staffUsernameNormalized!: string | null;
 
   @Prop({ type: Number, default: null })
@@ -56,7 +56,7 @@ export class PickupDocument {
   @Prop({ default: false })
   archived!: boolean;
 
-  @Prop({ default: null })
+  @Prop({ type: Date, default: null })
   completedAt!: Date | null;
 
   @Prop()
