@@ -94,6 +94,23 @@ La aplicación estará disponible en `http://localhost:3000`
 
 ## 📚 Documentación API (Swagger)
 
+## Análisis Entrega 3
+
+### Patrones en la API (NestJS)
+
+- **Hexagonal / Ports & Adapters**: Entidades, puertos y adaptadores desacoplados (`src/user/domain/user.entity.ts`, `src/user/application/ports/user.repository.ts`, `src/user/infrastructure/adapters/persistence/mongoose-user.repository.ts`).
+- **Repository Pattern**: Contratos e implementaciones concretas para persistencia (`UserRepository` ↔ `MongooseUserRepository`).
+- **Use Case / Application Service**: Clases que encapsulan reglas de negocio como `RegisterUserUseCase` y `ListPickupsUseCase`.
+- **Strategy Pattern (Framework)**: Nest integra Passport usando estrategias (`JwtStrategy`), ejemplo de aplicación del patrón Strategy.
+- **Decorator Pattern (Framework)**: Decoradores de NestJS (`@Controller`, `@Get`, `@Injectable`, `@InjectModel`, etc.) aplican metadatos y comportamientos a clases y métodos.
+
+### Patrones en el Front (React/Vite)
+
+- **Context/Provider Pattern**: `AuthProvider`, `PickupsProvider`, `NotificationProvider` centralizan estado y exponen hooks (`useAuth`, `usePickups`, `useNotifications`).
+- **Service/Gateway**: `apiService` actúa como fachada HTTP y unifica llamadas a la API.
+- **Observer / Pub-Sub**: El contexto de notificaciones emite eventos (toasts) y la UI suscrita reacciona.
+- **Composable Hooks**: Hooks customizados que encapsulan lógica reutilizable.
+
 Una vez iniciada la aplicación, la documentación interactiva de Swagger está disponible en:
 
 **http://localhost:3000/swagger**
