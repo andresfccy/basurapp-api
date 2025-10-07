@@ -1,11 +1,20 @@
 import { NestFactory } from '@nestjs/core';
+import type { INestApplication } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { configureApp } from './app.config';
 
-async function bootstrap() {
+export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule);
   configureApp(app);
+  return app;
+}
 
+async function bootstrap() {
+  if (process.env.SERVERLESS === 'true') {
+    return;
+  }
+
+  const app = await createApp();
   const port = process.env.PORT ?? 3000;
   await app.listen(port);
   console.log(`🚀 Aplicación corriendo en http://localhost:${port}`);
