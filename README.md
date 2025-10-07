@@ -96,7 +96,7 @@ La aplicación estará disponible en `http://localhost:3000`
 
 Una vez iniciada la aplicación, la documentación interactiva de Swagger está disponible en:
 
-**http://localhost:3000/api**
+**http://localhost:3000/swagger**
 
 Swagger proporciona:
 - Documentación completa de todos los endpoints
