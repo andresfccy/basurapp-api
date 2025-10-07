@@ -40,6 +40,21 @@ export class MongooseUserRepository implements UserRepository {
     return this.toDomain(updated);
   }
 
+  async updateVerificationCode(
+    userId: string,
+    verificationCode: string,
+  ): Promise<void> {
+    await this.userModel
+      .updateOne(
+        { id: userId },
+        {
+          emailVerificationCode: verificationCode,
+          emailVerificationExpiry: new Date(Date.now() + 15 * 60 * 1000), // 15 minutos
+        },
+      )
+      .exec();
+  }
+
   async delete(id: string): Promise<void> {
     await this.userModel.deleteOne({ id }).exec();
   }

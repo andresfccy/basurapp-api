@@ -11,6 +11,7 @@ import {
 // Application - Use Cases
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';
 import { ConfirmEmailUseCase } from './application/use-cases/confirm-email.use-case';
+import { ResendVerificationCodeUseCase } from './application/use-cases/resend-verification-code.use-case';
 
 // Application - Ports
 import { USER_REPOSITORY } from './application/ports/user.repository';
@@ -35,6 +36,7 @@ import { UserController } from './infrastructure/controllers/user.controller';
     // Use Cases
     RegisterUserUseCase,
     ConfirmEmailUseCase,
+    ResendVerificationCodeUseCase,
 
     // Repositories (Adapters)
     {

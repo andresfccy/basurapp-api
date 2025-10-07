@@ -23,7 +23,9 @@ async function bootstrap() {
     .setTitle('BasurApp API')
     .setDescription('API REST para la aplicación de recolección de basuras')
     .setVersion('1.0')
+    .addTag('auth', 'Autenticación')
     .addTag('users', 'Gestión de usuarios')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

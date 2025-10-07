@@ -10,8 +10,10 @@ import {
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { RegisterUserUseCase } from '../../application/use-cases/register-user.use-case';
 import { ConfirmEmailUseCase } from '../../application/use-cases/confirm-email.use-case';
+import { ResendVerificationCodeUseCase } from '../../application/use-cases/resend-verification-code.use-case';
 import { RegisterUserRequestDto } from './dtos/register-user.dto';
 import { ConfirmEmailRequestDto } from './dtos/confirm-email.dto';
+import { ResendVerificationRequestDto } from './dtos/resend-verification.dto';
 import { UserRole } from '../../domain/user.entity';
 
 @ApiTags('users')
@@ -20,6 +22,7 @@ export class UserController {
   constructor(
     private readonly registerUserUseCase: RegisterUserUseCase,
     private readonly confirmEmailUseCase: ConfirmEmailUseCase,
+    private readonly resendVerificationCodeUseCase: ResendVerificationCodeUseCase,
   ) {}
 
   @Post('register')
@@ -102,5 +105,36 @@ export class UserController {
       message: 'Email verificado exitosamente. Ya puedes iniciar sesión.',
       success: true,
     };
+  }
+
+  @Post('resend-verification')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  @ApiOperation({
+    summary: 'Reenviar código de verificación',
+    description:
+      'Genera y envía un nuevo código de verificación por email a usuarios con estado pendiente',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Código de verificación reenviado exitosamente',
+    schema: {
+      example: {
+        message: 'Código de verificación enviado exitosamente',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Usuario no encontrado',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'El usuario ya está verificado',
+  })
+  async resendVerification(@Body() dto: ResendVerificationRequestDto) {
+    return await this.resendVerificationCodeUseCase.execute({
+      email: dto.email,
+    });
   }
 }
