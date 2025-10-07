@@ -34,5 +34,9 @@ export default async function handler(
   }
 
   const server = globalRef.__NEST_EXPRESS_APP__;
-  server(req, res);
+  const requestHandler = server as unknown as (
+    req: Request,
+    res: Response,
+  ) => void;
+  requestHandler(req, res);
 }
