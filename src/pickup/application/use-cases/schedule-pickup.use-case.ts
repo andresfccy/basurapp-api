@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
+import { randomUUID } from 'node:crypto';
 import { Pickup, PickupKind, PickupTimeSlot } from '../../domain/pickup.entity';
 import {
   PICKUP_REPOSITORY,
@@ -26,7 +26,7 @@ export class SchedulePickupUseCase {
 
   async execute(dto: SchedulePickupDto): Promise<Pickup> {
     const pickup = Pickup.schedule({
-      id: uuid(),
+      id: randomUUID(),
       userId: dto.userId,
       requesterEmail: dto.requesterEmail,
       requesterName: dto.requesterName,

@@ -5,7 +5,7 @@ import { EMAIL_SERVICE } from '../ports/email.service';
 import type { UserRepository } from '../ports/user.repository';
 import type { EmailService } from '../ports/email.service';
 import * as bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'node:crypto';
 
 export class RegisterUserDto {
   email: string;
@@ -40,7 +40,7 @@ export class RegisterUserUseCase {
 
     // Crear usuario
     const user = User.create(
-      uuidv4(),
+      randomUUID(),
       dto.email,
       dto.firstName,
       dto.lastName,
